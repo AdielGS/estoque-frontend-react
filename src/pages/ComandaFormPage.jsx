@@ -1,21 +1,15 @@
 // src/pages/ComandaFormPage.jsx
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import '../App.css';
+import { Users, UserPlus } from 'lucide-react';
 
 function ComandaFormPage() {
-    // Estado para guardar a lista de clientes que virá da API
     const [clientes, setClientes] = useState([]);
-    
-    // Estados para controlar os campos do formulário
     const [clienteId, setClienteId] = useState('');
     const [nomeOcasional, setNomeOcasional] = useState('');
-    
     const navigate = useNavigate();
 
-    // Este useEffect vai buscar a lista de clientes assim que a página carregar
     useEffect(() => {
         const fetchClientes = async () => {
             const token = localStorage.getItem('authToken');
@@ -34,54 +28,78 @@ function ComandaFormPage() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const token = localStorage.getItem('authToken');
-
-        // Prepara os dados para enviar para a API
         const dadosComanda = {
-            // Se um clienteId foi selecionado, envia. Senão, envia nulo.
             clienteId: clienteId ? parseInt(clienteId) : null,
             nomeClienteOcasional: nomeOcasional
         };
+
+        if (!dadosComanda.clienteId && !dadosComanda.nomeClienteOcasional) {
+            alert('Por favor, selecione um cliente cadastrado ou informe o nome de um cliente ocasional.');
+            return;
+        }
 
         try {
             const response = await axios.post('http://localhost:8080/comandas', dadosComanda, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
-            
             alert('Comanda aberta com sucesso!');
-            // Futuramente, vamos navegar para a página de detalhes da comanda criada
-            // Por enquanto, voltamos para a lista de comandas.
-            navigate('/comandas');
-            
+            // --- CORREÇÃO AQUI ---
+            // Navega para a página de detalhes da comanda recém-criada
+            navigate(`/dashboard/comandas/${response.data.id}`);
         } catch (error) {
             alert('Erro ao abrir comanda. Verifique os dados.');
             console.error(error);
         }
     };
 
+    const handleClienteChange = (e) => {
+        setClienteId(e.target.value);
+        if (e.target.value) {
+            setNomeOcasional('');
+        }
+    };
+
+    const handleNomeOcasionalChange = (e) => {
+        setNomeOcasional(e.target.value);
+        if (e.target.value) {
+            setClienteId('');
+        }
+    };
+
     return (
-        <div>
+        <div className="form-container">
             <h1>Abrir Nova Comanda</h1>
-            <form onSubmit={handleSubmit} className="product-form">
-                <div className="form-group">
-                    <label htmlFor="cliente">Selecionar Cliente Cadastrado</label>
-                    <select id="cliente" value={clienteId} onChange={e => setClienteId(e.target.value)}>
-                        <option value="">-- Selecione --</option>
-                        {clientes.map(cliente => (
+            <p>Selecione um cliente ou insira um nome para iniciar uma nova comanda.</p>
+            <form onSubmit={handleSubmit} className="modern-form">
+                <div className="input-group">
+                    <Users className="input-icon" />
+                    <select value={clienteId} onChange={handleClienteChange} disabled={!!nomeOcasional}>
+                        <option value="">-- Selecione um cliente cadastrado --</option>
+                        {clientes.filter(c => c.ativo).map(cliente => (
                             <option key={cliente.id} value={cliente.id}>
                                 {cliente.nome}
                             </option>
                         ))}
                     </select>
                 </div>
-
-                <p><strong>OU</strong></p>
-
-                <div className="form-group">
-                    <label htmlFor="nomeOcasional">Nome do Cliente Ocasional</label>
-                    <input type="text" id="nomeOcasional" value={nomeOcasional} onChange={e => setNomeOcasional(e.target.value)} />
+                <div className="divider-text">
+                    <span>OU</span>
                 </div>
-                
-                <button type="submit">Abrir Comanda</button>
+                <div className="input-group">
+                    <UserPlus className="input-icon" />
+                    <input
+                        type="text"
+                        placeholder="Nome do Cliente Ocasional"
+                        value={nomeOcasional}
+                        onChange={handleNomeOcasionalChange}
+                        disabled={!!clienteId}
+                    />
+                </div>
+                <div className="form-actions">
+                    {/* --- CORREÇÃO AQUI --- */}
+                    <button type="button" className="btn-cancel" onClick={() => navigate('/dashboard/comandas')}>Cancelar</button>
+                    <button type="submit" className="btn-submit">Abrir Comanda</button>
+                </div>
             </form>
         </div>
     );
