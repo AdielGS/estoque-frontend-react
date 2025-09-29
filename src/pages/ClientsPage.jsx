@@ -16,7 +16,7 @@ function ClientsPage() {
             const token = localStorage.getItem('authToken');
             setLoading(true);
             try {
-                const url = `http://localhost:8080/clientes`;
+                const url = `https://api-satelite-sistema.onrender.com/clientes`;
                 const response = await axios.get(url, { headers: { 'Authorization': `Bearer ${token}` } });
                 setClientes(response.data);
             } catch (err) {

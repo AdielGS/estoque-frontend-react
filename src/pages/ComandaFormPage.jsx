@@ -14,7 +14,7 @@ function ComandaFormPage() {
         const fetchClientes = async () => {
             const token = localStorage.getItem('authToken');
             try {
-                const response = await axios.get('http://localhost:8080/clientes', {
+                const response = await axios.get('https://api-satelite-sistema.onrender.com/clientes', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 setClientes(response.data);

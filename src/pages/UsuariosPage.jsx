@@ -16,7 +16,7 @@ function UsuariosPage() {
             const token = localStorage.getItem('authToken');
             setLoading(true);
             try {
-                const url = `http://localhost:8080/usuarios`;
+                const url = `https://api-satelite-sistema.onrender.com/usuarios`;
                 const response = await axios.get(url, { headers: { 'Authorization': `Bearer ${token}` } });
                 setUsuarios(response.data);
             } catch (err) {

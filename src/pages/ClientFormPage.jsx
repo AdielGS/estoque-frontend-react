@@ -14,7 +14,7 @@ function ClientFormPage() {
     useEffect(() => {
         if (id) {
             const token = localStorage.getItem('authToken');
-            axios.get(`http://localhost:8080/clientes/${id}`, {
+            axios.get(`https://api-satelite-sistema.onrender.com/clientes/${id}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
             .then(response => {
@@ -34,12 +34,12 @@ function ClientFormPage() {
 
         try {
             if (id) {
-                await axios.put(`http://localhost:8080/clientes/${id}`, clienteDados, {
+                await axios.put(`https://api-satelite-sistema.onrender.com/clientes/${id}`, clienteDados, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 alert('Cliente atualizado com sucesso!');
             } else {
-                await axios.post('http://localhost:8080/clientes', clienteDados, {
+                await axios.post('https://api-satelite-sistema.onrender.com/clientes', clienteDados, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 alert('Cliente cadastrado com sucesso!');

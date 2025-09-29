@@ -15,7 +15,7 @@ function LoginPage() {
         event.preventDefault();
         setLoading(true);
         try {
-            const response = await axios.post('http://localhost:8080/login', { login, senha });
+            const response = await axios.post('https://api-satelite-sistema.onrender.com/login', { login, senha });
             
             // AGORA GUARDAMOS O TOKEN E O PERFIL
             localStorage.setItem('authToken', response.data.token);

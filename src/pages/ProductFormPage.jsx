@@ -15,7 +15,7 @@ function ProductFormPage() {
     useEffect(() => {
         if (id) {
             const token = localStorage.getItem('authToken');
-            axios.get(`http://localhost:8080/api/produtos/${id}`, {
+            axios.get(`https://api-satelite-sistema.onrender.com/api/produtos/${id}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
             .then(response => {

@@ -19,7 +19,7 @@ function ComandaDetailPage() {
         const token = localStorage.getItem('authToken');
         setLoading(true); // Garante que o loading seja reativado a cada busca
         try {
-            const response = await axios.get(`http://localhost:8080/comandas/${id}`, { headers: { 'Authorization': `Bearer ${token}` } });
+            const response = await axios.get(`https://api-satelite-sistema.onrender.com/comandas/${id}`, { headers: { 'Authorization': `Bearer ${token}` } });
             setComanda(response.data);
         } catch (err) {
             setError("Erro ao buscar detalhes da comanda.");

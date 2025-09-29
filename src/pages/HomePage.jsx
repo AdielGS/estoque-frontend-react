@@ -15,7 +15,7 @@ function HomePage() {
         const fetchStats = async () => {
             const token = localStorage.getItem('authToken');
             try {
-                const response = await axios.get('http://localhost:8080/dashboard/stats', {
+                const response = await axios.get('https://api-satelite-sistema.onrender.com/dashboard/stats', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 setStats(response.data);

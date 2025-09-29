@@ -18,7 +18,7 @@ function ProductsPage() {
             const token = localStorage.getItem('authToken');
             setLoading(true);
             try {
-                const url = `http://localhost:8080/api/produtos?page=${paginaAtual}&size=10&sort=nome`;
+                const url = `https://api-satelite-sistema.onrender.com/api/produtos?page=${paginaAtual}&size=10&sort=nome`;
                 const response = await axios.get(url, { headers: { 'Authorization': `Bearer ${token}` } });
                 setProdutos(response.data.content);
                 setTotalPaginas(response.data.totalPages);
