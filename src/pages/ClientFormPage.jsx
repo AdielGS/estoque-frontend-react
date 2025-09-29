@@ -1,8 +1,9 @@
 // src/pages/ClientFormPage.jsx
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import { User, Phone, Mail } from 'lucide-react';
+import '../App.css';
 
 function ClientFormPage() {
     const { id } = useParams();
@@ -14,6 +15,7 @@ function ClientFormPage() {
     useEffect(() => {
         if (id) {
             const token = localStorage.getItem('authToken');
+            // APONTANDO PARA A API ONLINE
             axios.get(`https://api-satelite-sistema.onrender.com/clientes/${id}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
@@ -34,19 +36,19 @@ function ClientFormPage() {
 
         try {
             if (id) {
+                // APONTANDO PARA A API ONLINE
                 await axios.put(`https://api-satelite-sistema.onrender.com/clientes/${id}`, clienteDados, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 alert('Cliente atualizado com sucesso!');
             } else {
+                // APONTANDO PARA A API ONLINE
                 await axios.post('https://api-satelite-sistema.onrender.com/clientes', clienteDados, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 alert('Cliente cadastrado com sucesso!');
             }
-            // --- CORREÇÃO AQUI ---
-            // O caminho correto para a lista de clientes é dentro do dashboard
-            navigate('/dashboard/clientes');
+            navigate('/clientes');
         } catch (error) {
             alert('Erro ao salvar cliente. Verifique se o telefone já não está em uso.');
             console.error(error);
@@ -54,27 +56,22 @@ function ClientFormPage() {
     };
 
     return (
-        <div className="form-container">
-            <h1>{id ? 'Editar Cliente' : 'Novo Cliente'}</h1>
-            <p>Preencha os dados para {id ? 'atualizar o' : 'cadastrar um novo'} cliente.</p>
-            <form onSubmit={handleSubmit} className="modern-form">
-                <div className="input-group">
-                    <User className="input-icon" />
-                    <input type="text" placeholder="Nome completo" value={nome} onChange={e => setNome(e.target.value)} required />
+        <div>
+            <h1>{id ? 'Editar Cliente' : 'Cadastrar Novo Cliente'}</h1>
+            <form onSubmit={handleSubmit} className="product-form">
+                <div className="form-group">
+                    <label htmlFor="nome">Nome</label>
+                    <input type="text" id="nome" value={nome} onChange={e => setNome(e.target.value)} required />
                 </div>
-                <div className="input-group">
-                    <Phone className="input-icon" />
-                    <input type="text" placeholder="Telefone" value={telefone} onChange={e => setTelefone(e.target.value)} required />
+                <div className="form-group">
+                    <label htmlFor="telefone">Telefone</label>
+                    <input type="text" id="telefone" value={telefone} onChange={e => setTelefone(e.target.value)} required />
                 </div>
-                <div className="input-group">
-                    <Mail className="input-icon" />
-                    <input type="email" placeholder="Email (opcional)" value={email} onChange={e => setEmail(e.target.value)} />
+                <div className="form-group">
+                    <label htmlFor="email">Email</label>
+                    <input type="email" id="email" value={email} onChange={e => setEmail(e.target.value)} />
                 </div>
-                <div className="form-actions">
-                    {/* --- CORREÇÃO AQUI --- */}
-                    <button type="button" className="btn-cancel" onClick={() => navigate('/dashboard/clientes')}>Cancelar</button>
-                    <button type="submit" className="btn-submit">Salvar Cliente</button>
-                </div>
+                <button type="submit">Salvar Cliente</button>
             </form>
         </div>
     );

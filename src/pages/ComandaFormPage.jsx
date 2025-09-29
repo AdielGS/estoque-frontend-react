@@ -39,12 +39,10 @@ function ComandaFormPage() {
         }
 
         try {
-            const response = await axios.post('http://localhost:8080/comandas', dadosComanda, {
+            const response = await axios.post('https://api-satelite-sistema.onrender.com/comandas', dadosComanda, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             alert('Comanda aberta com sucesso!');
-            // --- CORREÇÃO AQUI ---
-            // Navega para a página de detalhes da comanda recém-criada
             navigate(`/dashboard/comandas/${response.data.id}`);
         } catch (error) {
             alert('Erro ao abrir comanda. Verifique os dados.');
@@ -96,7 +94,6 @@ function ComandaFormPage() {
                     />
                 </div>
                 <div className="form-actions">
-                    {/* --- CORREÇÃO AQUI --- */}
                     <button type="button" className="btn-cancel" onClick={() => navigate('/dashboard/comandas')}>Cancelar</button>
                     <button type="submit" className="btn-submit">Abrir Comanda</button>
                 </div>
