@@ -1,12 +1,12 @@
 // src/pages/ComandaDetailPage.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom'; // Importa o useNavigate
-import { ShoppingCart, User, Hash, CheckCircle, Plus, Loader, AlertCircle, XCircle } from 'lucide-react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { ShoppingCart, User, Hash, CheckCircle, Plus, XCircle } from 'lucide-react';
 
 function ComandaDetailPage() {
     const { id } = useParams();
-    const navigate = useNavigate(); // Inicializa o hook de navegação
+    const navigate = useNavigate();
     const [comanda, setComanda] = useState(null);
     const [produtos, setProdutos] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -17,7 +17,7 @@ function ComandaDetailPage() {
 
     const fetchComandaDetails = async () => {
         const token = localStorage.getItem('authToken');
-        setLoading(true); // Garante que o loading seja reativado a cada busca
+        setLoading(true);
         try {
             const response = await axios.get(`https://api-satelite-sistema.onrender.com/comandas/${id}`, { headers: { 'Authorization': `Bearer ${token}` } });
             setComanda(response.data);
@@ -33,7 +33,8 @@ function ComandaDetailPage() {
         fetchComandaDetails();
         const fetchProdutos = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/produtos?size=200&sort=nome', { headers: { 'Authorization': `Bearer ${token}` } });
+                // CORREÇÃO AQUI: Apontando para a API online
+                const response = await axios.get('https://api-satelite-sistema.onrender.com/api/produtos?size=200&sort=nome', { headers: { 'Authorization': `Bearer ${token}` } });
                 setProdutos(response.data.content);
             } catch (err) {
                 console.error("Erro ao buscar produtos", err);
@@ -48,9 +49,9 @@ function ComandaDetailPage() {
         setIsSubmitting(true);
         const token = localStorage.getItem('authToken');
         try {
-            await axios.post(`http://localhost:8080/comandas/${id}/itens`, { produtoId: parseInt(produtoSelecionadoId), quantidade }, { headers: { 'Authorization': `Bearer ${token}` } });
+            await axios.post(`https://api-satelite-sistema.onrender.com/comandas/${id}/itens`, { produtoId: parseInt(produtoSelecionadoId), quantidade }, { headers: { 'Authorization': `Bearer ${token}` } });
             alert("Item adicionado!");
-            fetchComandaDetails(); // Recarrega os dados
+            fetchComandaDetails();
             setProdutoSelecionadoId('');
             setQuantidade(1);
         } catch (error) {
@@ -65,7 +66,7 @@ function ComandaDetailPage() {
         setIsSubmitting(true);
         const token = localStorage.getItem('authToken');
         try {
-            await axios.post(`http://localhost:8080/comandas/${id}/fechar`, {}, { headers: { 'Authorization': `Bearer ${token}` } });
+            await axios.post(`https://api-satelite-sistema.onrender.com/comandas/${id}/fechar`, {}, { headers: { 'Authorization': `Bearer ${token}` } });
             alert("Comanda fechada!");
             fetchComandaDetails();
         } catch (error) {
@@ -80,9 +81,8 @@ function ComandaDetailPage() {
         setIsSubmitting(true);
         const token = localStorage.getItem('authToken');
         try {
-            await axios.post(`http://localhost:8080/comandas/${id}/cancelar`, {}, { headers: { 'Authorization': `Bearer ${token}` } });
+            await axios.post(`https://api-satelite-sistema.onrender.com/comandas/${id}/cancelar`, {}, { headers: { 'Authorization': `Bearer ${token}` } });
             alert("Comanda cancelada com sucesso!");
-            // --- CORREÇÃO AQUI ---
             navigate('/dashboard/comandas');
         } catch (error) {
             alert("Erro ao cancelar comanda.");
