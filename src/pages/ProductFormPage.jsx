@@ -42,17 +42,16 @@ function ProductFormPage() {
 
         try {
             if (id) {
-                await axios.put(`http://localhost:8080/api/produtos/${id}`, produtoDados, {
+                await axios.put(`https://api-satelite-sistema.onrender.com/api/produtos/${id}`, produtoDados, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 alert('Produto atualizado com sucesso!');
             } else {
-                await axios.post('http://localhost:8080/api/produtos', produtoDados, {
+                await axios.post('https://api-satelite-sistema.onrender.com/api/produtos', produtoDados, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 alert('Produto cadastrado com sucesso!');
             }
-            // --- CORREÇÃO AQUI ---
             navigate('/dashboard/produtos');
         } catch (error) {
             alert('Erro ao salvar produto. Verifique os dados e suas permissões.');
@@ -84,7 +83,6 @@ function ProductFormPage() {
                     </div>
                 </div>
                 <div className="form-actions">
-                    {/* --- CORREÇÃO AQUI --- */}
                     <button type="button" className="btn-cancel" onClick={() => navigate('/dashboard/produtos')}>Cancelar</button>
                     <button type="submit" className="btn-submit">Salvar Produto</button>
                 </div>
